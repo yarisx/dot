@@ -1,0 +1,10 @@
+color blue
+syntax on
+set shiftwidth=4
+set tabstop=8
+set softtabstop=4
+set foldenable
+set foldmethod=manual
+set noremap
+set expandtab
+set colorcolumn=81

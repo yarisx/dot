@@ -1,0 +1,69 @@
+# /bin/bash
+
+## Independent conveniences
+
+[ ! -z "$(alias ll 2>/dev/null)" ] && unalias ll
+
+alias ls='ls -F --color=auto'
+alias ll='ls -lF --color=auto'
+alias ltr='ls -ltrF --color=auto'
+alias psg='ps -ef | grep -E --color=auto'
+alias cdlog='cd /var/log'
+alias grep='grep -E --color=auto'
+
+alias hgrep='history | grep -E --color=auto'
+alias r_grep='grep -RE --color=auto'
+alias ri_grep='grep -iRE'
+
+alias zxvf='tar zxvf'
+alias jxvf='tar jxvf'
+alias ztvf='tar ztvf'
+alias jtvf='tar jtvf'
+alias zxf='tar zxf'
+alias jxf='tar jxf'
+
+alias cal='cal -mw'
+
+# Aliased sudo, not to type every time
+alias tcpdump='sudo tcpdump -n'
+alias ping='sudo ping'
+
+# Networking aliases
+alias ip4addr='ip -4 addr list'
+alias ip6addr='ip -6 addr list'
+alias iproute='ip route list'
+alias conntest='ping 8.8.8.8'
+
+function mkdcd() {
+    mkdir -p $1
+    [ "$?" = "0" ] && cd $1
+}
+
+alias setup_google='sudo /usr/local/bin/setup_ns.sh setup google'
+alias setup_facebook='sudo /usr/local/bin/setup_ns.sh setup facebook'
+alias open_google='sudo enter_ns.sh google google /home/google/firefox.sh &'
+alias open_facebook='sudo enter_ns.sh facebook facebook /home/facebook/firefox.sh &'
+alias feedly='xhost si:localuser:feedly && sudo -u feedly firefox feedly.com 2>/dev/null &'
+alias firefox='sudo -u ff firefox 2>/dev/null &'
+
+alias em-sync='sudo emerge --sync'
+#alias em-update-ask='sudo /usr/bin/emerge -uDU --ask --ask-enter-invalid --with-bdeps=y @world'
+alias em-update-ask='sudo /usr/local/bin/update.sh'
+alias glsa-check='glsa-check --test affected'
+
+alias virt_firefox='/usr/local/bin/virtual_firefox.sh'
+
+alias vpn='sudo rc-service openvpn start'
+function no_vpn() {
+    if [ ! -z "$(grep '/net/music' /proc/mounts)" ]
+    then
+        sudo umount /net/music
+    fi
+    if [ ! -z "$(grep '/net/video' /proc/mounts)" ]
+    then
+        sudo umount /net/video
+    fi
+    sudo rc-service openvpn stop
+}
+
+alias poweroff='sudo poweroff'
