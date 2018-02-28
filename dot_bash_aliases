@@ -7,13 +7,14 @@
 alias ls='ls -F --color=auto'
 alias ll='ls -lF --color=auto'
 alias ltr='ls -ltrF --color=auto'
+alias lsr='ls -lrSF --color=auto'
 alias psg='ps -ef | grep -E --color=auto'
 alias cdlog='cd /var/log'
 alias grep='grep -E --color=auto'
 
-alias hgrep='history | grep -E --color=auto'
-alias r_grep='grep -RE --color=auto'
-alias ri_grep='grep -iRE'
+alias hgrep='history | /bin/grep -E --color=auto'
+alias r_grep='/bin/grep -RE --color=auto'
+alias ri_grep='/bin/grep -iRE --color=auto'
 
 alias zxvf='tar zxvf'
 alias jxvf='tar jxvf'
@@ -21,11 +22,12 @@ alias ztvf='tar ztvf'
 alias jtvf='tar jtvf'
 alias zxf='tar zxf'
 alias jxf='tar jxf'
+alias tvf='tar tvf'
 
 alias cal='cal -mw'
 
 # Aliased sudo, not to type every time
-alias tcpdump='sudo tcpdump -n'
+alias tcpdump='sudo tcpdump -n -U'
 alias ping='sudo ping'
 
 # Networking aliases
