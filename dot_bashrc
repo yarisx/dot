@@ -32,19 +32,42 @@ HISTTIMEFORMAT="%H:%M:%S "
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+function python_ver()
+{
+    if [ -z "${EPYTHON}" ]
+    then
+        [ -z "${PTN_VER}" ] && PTN_VER="$($(which python) --version | cut -d' ' -f2)"
+    else
+        PTN_VER="$(echo ${EPYTHON} | sed -e 's!python!!')"
+    fi
+    echo ${PTN_VER}
+}
+
+function git_branch()
+{
+    GIT_BRANCH_BS="$(git status -bs 2>/dev/null | grep '\#\#')"
+    GIT_BRANCH_LOCAL="$(echo $GIT_BRANCH_BS | awk '{match($2,"^(.*)[.]{3,3}",a); if (RLENGTH != -1) { print a[1]; } else { print $2; }; }')"
+    if [ -z "$(echo ${GIT_BRANCH_LOCAL} | grep '/')" ]
+    then
+        GIT_BRANCH="${GIT_BRANCH_LOCAL}"
+    else
+        GIT_BRANCH="$(echo ${GIT_BRANCH_LOCAL} | awk '{match($1, "^[a-z]+/([^_]{1,10}).*",a); print a[1]; }')"
+    fi
+    if [[ -z "${GIT_BRANCH}" || "\n" = "${GIT_BRANCH}" ]]
+    then
+        GIT_BRANCH="none"
+    fi
+    echo $GIT_BRANCH
+}
+
 function local_get_prompt()
 {
-    NETNS="$(ip netns identify $$ 2>/dev/null)"
-    if [ -z "$NETNS" ]
-    then
-        NETNS="main"
-    fi
-	PS1='[\t] \[\033[01;38m\][ns $NETNS]\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='[\t] \[\033[01;38m\][python $(python_ver)] [br $(git_branch)]\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$ '
 }
 
 
-PS1='[\t] \[\033[01;38m\][ns $NETNS]\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$ '
-export PROMPT_COMMAND=local_get_prompt
+PS1='[\t] \[\033[01;38m\][python $(python_ver)]\[\033[00m\] \[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w\[\033[00m\]\$ '
+PROMPT_COMMAND=local_get_prompt
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases

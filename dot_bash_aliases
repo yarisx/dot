@@ -26,6 +26,8 @@ alias tvf='tar tvf'
 
 alias cal='cal -mw'
 
+alias find_here='find .'
+
 # Aliased sudo, not to type every time
 alias tcpdump='sudo tcpdump -n -U'
 alias ping='sudo ping'
@@ -43,10 +45,10 @@ function mkdcd() {
 
 alias setup_google='sudo /usr/local/bin/setup_ns.sh setup google'
 alias setup_facebook='sudo /usr/local/bin/setup_ns.sh setup facebook'
-alias open_google='sudo enter_ns.sh google google /home/google/firefox.sh &'
+alias open_google='sudo enter_ns.sh google google /home/google/firefox.sh 2>/dev/null &'
 alias open_facebook='sudo enter_ns.sh facebook facebook /home/facebook/firefox.sh &'
 alias feedly='xhost si:localuser:feedly && sudo -u feedly firefox feedly.com 2>/dev/null &'
-alias firefox='sudo -u ff firefox 2>/dev/null &'
+alias firefox='xhost si:localuser:ff && sudo -u ff firefox 2>/dev/null &'
 
 alias em-sync='sudo emerge --sync'
 #alias em-update-ask='sudo /usr/bin/emerge -uDU --ask --ask-enter-invalid --with-bdeps=y @world'
@@ -54,6 +56,22 @@ alias em-update-ask='sudo /usr/local/bin/update.sh'
 alias glsa-check='glsa-check --test affected'
 
 alias virt_firefox='/usr/local/bin/virtual_firefox.sh'
+
+# Work-related aliases
+function git-mkbranch()
+{
+    if [ "$1" == "-h" ]
+    then
+        echo "This function should be called like: git-mkbranch XXXXX 'description'"
+        echo "It creates a branch with the name like '$(id -un)/eng-XXXXX_description'"
+    else
+        descr="$(echo $2 | sed -e 's! !_!g')"
+        git_cmd="git checkout -b $(id -un)/eng-${1}_${descr}"
+        $git_cmd
+    fi
+}
+alias win='env CONFD_LOCAL_FLAGS=-w'
+# End of work-related aliases
 
 alias vpn='sudo rc-service openvpn start'
 function no_vpn() {
