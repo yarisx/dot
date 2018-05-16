@@ -134,3 +134,35 @@ function MyTabLine()
   endif
   return s
 endfunction
+
+set runtimepath^=/home/ymaslenn/opt/vim-erlang-tags
+
+"enable mouse in vim
+set mouse=a
+
+"autodetect filtype YANG
+au BufRead,BufNewFile *.yang    setf yang
+
+" some other useful file types
+au BufRead,BufNewFile {confd,ncs}.conf setf xml
+au BufRead,BufNewFile netconf*trace setf xml
+au BufRead,BufNewFile *.yang    setf yang
+au BufRead,BufNewFile *.{log,txt}   set colorcolumn=
+
+" autoopen confderr.log, ncserr.log
+au BufReadCmd,FileReadCmd {confd,ncs}err.log.[0-9]*
+            \ read ! ${TRUNK}/bin/confd --printlog "<afile>:r" ||
+            \ ${TRUNK}/bin/confd --printlog "<afile>"
+au BufReadCmd,FileReadCmd {confd,ncs}err.log
+            \ read ! ${TRUNK}/bin/confd --printlog "<afile>"
+au BufReadCmd,FileReadCmd {confd,ncs}err.log.
+            \ read ! ${TRUNK}/bin/confd --printlog "<afile>:r"
+au BufReadCmd {confd,ncs}err.log* :1
+au BufReadCmd {confd,ncs}err.log* :d
+" autoopen debug-dump
+" file name must be <filename>.dump
+au BufReadCmd,FileReadCmd *.dump
+            \ read ! ${TRUNK}/bin/confd --show-debug-dump "<afile>"
+au BufReadCmd *.dump :1
+au BufReadCmd *.dump :d
+au FileType yang :syntax sync fromstart
